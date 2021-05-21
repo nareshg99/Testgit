@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6a62b5a9-fe96-4886-a524-7caa837ca133" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="choice-routerFlow" doc:id="e9f2c2f7-7cce-4585-8bbb-2025743b1538" >
+		<http:listener doc:name="Listener" doc:id="77496aaa-ac5f-4e64-b089-601ca74cae6d" config-ref="HTTP_Listener_config" path="/choice"/>
+		<set-variable value="#[attributes.queryParams.language]" doc:name="Set Variable" doc:id="7de41808-33ed-407e-bd0e-3818b91ed4db" variableName="choicevar"/>
+		<choice doc:name="Choice" doc:id="63f46c8a-8953-4dc8-bb27-d40e5572ca8c" >
+			<when expression='#[vars.choicevar == "English"]'>
+				<ee:transform doc:name="Transform Message" doc:id="de3d5ca4-5656-4bb4-adda-810e16871d63" >
+					<ee:message >
+						<ee:set-payload ><![CDATA["English Message"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[vars.choicevar == " Hindi"]'>
+				<ee:transform doc:name="Transform Message" doc:id="467ac9ce-c61d-4999-9828-6ee2dd4cf6ce" >
+					<ee:message >
+						<ee:set-payload ><![CDATA["Hindi Message"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[vars.choicevar == "Telugu"]'>
+				<ee:transform doc:name="Transform Message" doc:id="94356655-7a4a-4fdc-97a7-dde9e21bbdea" >
+					<ee:message >
+						<ee:set-payload ><![CDATA["Telugu Message"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="8d6bf015-5501-476b-bc4a-353e341f2ec7" >
+					<ee:message >
+						<ee:set-payload ><![CDATA["Default"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
